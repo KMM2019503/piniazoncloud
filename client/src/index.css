@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "NerkoOne";
+    src: url("./assets/fonts/NerkoOne-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Jersey10";
+    src: url("./assets/fonts/Jersey10-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  body {
+    font-family: "NerkoOne", sans-serif;
+  }
+}
