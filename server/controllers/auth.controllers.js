@@ -14,6 +14,24 @@ import {
 
 import { User } from "../models/user.models.js";
 
+export const checkAuth = async (req, res) => {
+  const { userId } = req;
+
+  try {
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+    generateJwtTokenAndSetCookie(res, user._id);
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.log("Error in checkAuth ", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
 export const signup = async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -117,7 +135,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("AuthToken");
   res.status(201).json({ success: true, message: "Logout successfully" });
 };
 
