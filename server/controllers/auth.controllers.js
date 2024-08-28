@@ -34,6 +34,7 @@ export const checkAuth = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
+    console.log("body", req.body);
     const { email, password, username } = req.body;
 
     if (!email || !password || !username) {

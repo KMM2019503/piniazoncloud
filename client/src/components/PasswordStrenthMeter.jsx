@@ -62,7 +62,7 @@ const PasswordStrengthMeter = ({ password = "" }) => {
   };
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 font-sans">
       <div className="flex justify-between items-center mb-1">
         <span className="text-xs text-gray-400">Password strength</span>
         <span className="text-xs text-gray-400">

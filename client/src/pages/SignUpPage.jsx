@@ -8,10 +8,16 @@ import { MdPassword } from "react-icons/md";
 import InputErrorMessage from "../components/ui/InputErrorMessage";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrenthMeter";
+import ButtonLoader from "../components/ui/ButtonLoader";
+import { useAuthStore } from "../store/authStore";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
+
+  const { signup, isLoading } = useAuthStore();
+
   // Define your validation schema
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -35,8 +41,18 @@ const SignUpPage = () => {
 
   const password = watch("password", "");
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data);
+    try {
+      await signup({
+        email: data.email,
+        password: data.password,
+        username: data.username,
+      });
+      navigate("/email-verify");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -56,10 +72,16 @@ const SignUpPage = () => {
               loading="lazy"
             />
             <div>
-              <h1 className="text-xl md:text-lg text-purple-600">
-                Welcome From PiniazOnCloud
-              </h1>
-              <p className="text-2xl font-light font-Jersey text-gray-300">
+              <div className="text-xl md:text-lg text-yellow-600 ">
+                <strong className="text-orange-700 tracking-widest text-2xl">
+                  Piniaz
+                </strong>{" "}
+                <span className="font-Jersey">On</span>{" "}
+                <strong className="text-orange-700 tracking-widest text-2xl">
+                  Cloud
+                </strong>
+              </div>
+              <p className="text-xl font-light font-Jersey text-gray-300 tracking-wider">
                 Create Your Account for Free
               </p>
             </div>
@@ -97,15 +119,15 @@ const SignUpPage = () => {
             <PasswordStrengthMeter password={password} />
 
             <motion.button
-              className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-secondary-dark to-secondary text-white 
+              className="mt-3 w-full py-3 px-4 bg-gradient-to-r from-secondary-dark to-secondary text-white 
             font-bold rounded-lg shadow-lg  focus:outline-none focus:ring-2 focus:ring-secondary-light focus:ring-offset-2
              focus:ring-offset-gray-900 transition ease-in-out tracking-widest"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              // disabled={isLoading}
+              disabled={isLoading}
             >
-              Sign Up
+              {isLoading ? <ButtonLoader /> : "Sign Up"}
             </motion.button>
           </form>
         </div>
