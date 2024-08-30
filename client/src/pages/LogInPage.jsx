@@ -10,10 +10,14 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
 import ButtonLoader from "../components/ui/ButtonLoader";
-import { useState } from "react";
+import { useAuthStore } from "../store/authStore";
+
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const { login, isLoading } = useAuthStore();
 
   // Define your validation schema
   const validationSchema = Yup.object().shape({
@@ -32,10 +36,16 @@ const LoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (data) => {
-    setIsLoading(true);
-    console.log(data);
-    setIsLoading(false);
+  const onSubmit = async (data) => {
+    try {
+      await login({
+        email: data.email,
+        password: data.password,
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

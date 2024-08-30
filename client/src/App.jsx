@@ -5,6 +5,8 @@ import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogInPage";
 import EmailVerifyPage from "./pages/EmailVerifyPage";
 
+import { Toaster } from "react-hot-toast";
+
 function App() {
   return (
     <>
@@ -15,6 +17,27 @@ function App() {
           <Route path="/login" element={<LogInPage />} />
           <Route path="/email-verify" element={<EmailVerifyPage />} />
         </Routes>
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              padding: "4px 10px",
+              color: "#713200",
+              borderRadius: "5px",
+            },
+            success: {
+              style: {
+                border: "1px solid #301934",
+              },
+            },
+            error: {
+              style: {
+                border: "1px solid #D22B2B",
+              },
+            },
+          }}
+        />
       </main>
     </>
   );

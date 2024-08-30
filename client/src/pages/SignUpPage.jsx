@@ -42,7 +42,6 @@ const SignUpPage = () => {
   const password = watch("password", "");
 
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
     try {
       await signup({
         email: data.email,
