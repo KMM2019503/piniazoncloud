@@ -6,6 +6,7 @@ import LogInPage from "./pages/LogInPage";
 import EmailVerifyPage from "./pages/EmailVerifyPage";
 
 import { Toaster } from "react-hot-toast";
+import ForgotPasswrod from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LogInPage />} />
           <Route path="/email-verify" element={<EmailVerifyPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswrod />} />
         </Routes>
         <Toaster
           position="top-right"
