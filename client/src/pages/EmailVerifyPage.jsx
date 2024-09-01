@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ButtonLoader from "../components/ui/ButtonLoader";
 import Logo from "../assets/images/Logo.jpeg";
 import { useAuthStore } from "../store/authStore";
+import toast from "react-hot-toast";
 
 const EmailVerifyPage = () => {
   const navigate = useNavigate();
@@ -50,8 +51,8 @@ const EmailVerifyPage = () => {
     const verificationCode = code.join("");
     try {
       await verifyToken(verificationCode);
+      toast.success("Email verified successfully");
       navigate("/");
-      // toast.success("Email verified successfully");
     } catch (error) {
       console.log(error);
     }

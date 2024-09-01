@@ -19,3 +19,15 @@
     font-family: "NerkoOne", sans-serif;
   }
 }
+
+.grid-background {
+  background: #000000;
+  background-image: linear-gradient(
+      rgba(61, 13, 87, 0.3) 0.1em,
+      transparent 0.1em
+    ),
+    linear-gradient(90deg, rgba(46, 7, 63, 0.3) 0.1em, transparent 0.1em)
+      radial-gradient(circle, transparent, black 10%);
+
+  background-size: 3em 3em;
+}

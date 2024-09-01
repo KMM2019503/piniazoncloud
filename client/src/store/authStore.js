@@ -36,6 +36,7 @@ export const useAuthStore = create((set) => ({
         isAuthenticated: true,
         isLoading: false,
         message: data.message,
+        error: null,
       });
     } catch (error) {
       set({ errorMessage: error.message, isLoading: false });
@@ -62,10 +63,16 @@ export const useAuthStore = create((set) => ({
       }
 
       const data = await response.json();
-      set({ user: data.user, isAuthenticated: true, isLoading: false });
+      set({
+        user: data.user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
       return data;
     } catch (error) {
       set({ error: error.message, isLoading: false });
+      toast.error(error.message);
       throw error;
     } finally {
       set({ isLoading: false });
@@ -96,6 +103,7 @@ export const useAuthStore = create((set) => ({
         user: data.user,
         isAuthenticated: true,
         message: data.message,
+        error: null,
       });
       console.log("🚀 ~ login: ~ message:", data.message);
     } catch (error) {
@@ -129,6 +137,7 @@ export const useAuthStore = create((set) => ({
         user: null,
         isAuthenticated: false,
         message: data.message,
+        error: null,
       });
     } catch (error) {
       set({ errorMessage: error.message });
@@ -161,6 +170,7 @@ export const useAuthStore = create((set) => ({
         user: data.user,
         isAuthenticated: true,
         message: data.message,
+        error: null,
       });
     } catch (error) {
       console.log("🚀 ~ checkAuth: ~ error:", error);

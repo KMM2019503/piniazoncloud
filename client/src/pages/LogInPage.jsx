@@ -98,6 +98,14 @@ const LoginPage = () => {
               placeholder="Password"
               {...register("password")}
             />
+            <p className="text-lg md:text-base text-gray-400 ml-4">
+              <Link
+                to={"/forgot-password"}
+                className="text-secondary-light hover:underline tracking-wider"
+              >
+                Forgot Password?
+              </Link>
+            </p>
 
             <motion.button
               className="mt-3 w-full py-3 px-4 bg-gradient-to-r from-secondary-dark to-secondary text-white 

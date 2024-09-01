@@ -1,24 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
-import { useEffect } from "react";
+
 import Loading from "../components/ui/Loading";
+import { useAuthStore } from "../store/authStore";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { logout, user, checkAuth, isLoading } = useAuthStore();
-
-  useEffect(() => {
-    const authenticate = async () => {
-      try {
-        await checkAuth();
-      } catch (error) {
-        console.log("🚀 ~ authenticate ~ error:", error);
-        navigate("/login");
-      }
-    };
-
-    authenticate();
-  }, []);
+  const { logout, isLoading, user } = useAuthStore();
 
   const onLogout = async () => {
     try {
@@ -38,9 +25,15 @@ const HomePage = () => {
   }
 
   return (
-    <div>
+    <div className="text-center border-gray-400 border p-10 rounded-md">
       <p>{user?.username}</p>
-      <button onClick={onLogout}>Logout</button>
+      <p>{user?.isVerified ? "User is Verified" : "User is not Verified"}</p>
+      <button
+        onClick={onLogout}
+        className="border border-gray-400 px-4 py-1 rounded-lg cursor-pointer"
+      >
+        Logout
+      </button>
     </div>
   );
 };
