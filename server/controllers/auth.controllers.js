@@ -217,6 +217,7 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { newPassword } = req.body;
+  console.log("🚀 ~ resetPassword ~ newPassword:", newPassword);
 
   try {
     if (!newPassword) {
@@ -244,7 +245,7 @@ export const resetPassword = async (req, res) => {
     await sendResetPasswordSuccessfulEmail(user.email);
 
     res.status(200).json({
-      message: "Password reset successful.",
+      message: "Password reset successful try to login.",
       success: true,
     });
   } catch (error) {

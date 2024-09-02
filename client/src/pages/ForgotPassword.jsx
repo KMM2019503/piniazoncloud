@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import ButtonLoader from "../components/ui/ButtonLoader";
 import Logo from "../assets/images/Logo.jpeg";
-import { useAuthStore } from "../store/authStore";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -14,7 +13,7 @@ import toast from "react-hot-toast";
 // import { useAuthStore } from "../store/authStore";
 
 const ForgotPasswrod = () => {
-  const { isLoading } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState();
   const [isSuccess, setIsSuccess] = useState();
 
@@ -36,6 +35,9 @@ const ForgotPasswrod = () => {
 
   const onSubmit = async (data) => {
     try {
+      setIsError(null);
+      setIsSuccess(null);
+      setIsLoading(true);
       const response = await fetch(`${API_URL}/forgot-password`, {
         method: "POST",
         headers: {
@@ -56,6 +58,8 @@ const ForgotPasswrod = () => {
     } catch (error) {
       console.log("🚀 ~ onSubmit ~ error:", error.message);
       setIsError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,7 +102,7 @@ const ForgotPasswrod = () => {
 
           {isSuccess && (
             <p className="my-2 text-sm tracking-wider font-sans text-nowrap ">
-              A password reset link has been sent to your email.
+              Password reset link sent to your email.
             </p>
           )}
 

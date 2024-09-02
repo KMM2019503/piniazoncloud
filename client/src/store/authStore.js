@@ -179,4 +179,41 @@ export const useAuthStore = create((set) => ({
       set({ isLoading: false });
     }
   },
+  resetPassword: async (token, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await fetch(`${API_URL}/reset-password/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword: password }),
+        credentials: "include",
+      });
+
+      console.log("status", response.status);
+
+      if (response.status === 404) {
+        throw new Error("Your password reset link was invalid or expired");
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error not Authenticated");
+      }
+      const data = await response.json();
+
+      toast.success(`${data?.message}`);
+
+      set({
+        message: data.message,
+        error: null,
+      });
+    } catch (error) {
+      console.log("🚀 ~ checkAuth: ~ error:", error);
+      throw error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));

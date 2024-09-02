@@ -45,7 +45,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="min-h-svh flex items-center justify-center relative overflow-hidden text-gray-300 bg-secondary-dark">
         <Loading />
       </div>
     );
@@ -53,8 +53,8 @@ function App() {
   return (
     <>
       {/* <main className="min-h-svh bg-gradient-to-tr from-primary-dark via-primary-dark to-secondary-dark flex items-center justify-center relative overflow-hidden text-gray-300"> */}
-      <main className="min-h-svh  flex items-center justify-center relative overflow-hidden text-gray-300 bg-black">
-        <div className="absolute inset-0 h-full w-full bg-black bg-[radial-gradient(#7A1CAC_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_1%,black)] "></div>
+      <main className="min-h-svh flex items-center justify-center relative overflow-hidden text-gray-300 bg-black">
+        <div className="absolute inset-0 h-full w-full bg-black bg-[radial-gradient(#7A1CAC_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_1%,black)] z-0"></div>
         <Routes>
           <Route
             path="/"
@@ -88,8 +88,22 @@ function App() {
               </RedirectUser>
             }
           />
-          <Route path="/forgot-password" element={<ForgotPasswrod />} />
-          <Route path="/reset-password/:id" element={<ResetPasswrod />} />
+          <Route
+            path="/forgot-password"
+            element={
+              <RedirectUser>
+                <ForgotPasswrod />
+              </RedirectUser>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <RedirectUser>
+                <ResetPasswrod />
+              </RedirectUser>
+            }
+          />
         </Routes>
         <Toaster
           position="top-right"
