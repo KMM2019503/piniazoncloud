@@ -3,8 +3,12 @@ import dotenv from "dotenv";
 import cors from "cors"; // Import the cors middleware
 
 import { DbConnection } from "./db/DbConnection.js";
-import authRoutes from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
+
+import authRoutes from "./routes/auth.routes.js";
+import imageRoutes from "./routes/image.routes.js";
+
+import { errorHandler } from "./utils/errorHandler.js";
 
 dotenv.config();
 
@@ -22,6 +26,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/images", imageRoutes);
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

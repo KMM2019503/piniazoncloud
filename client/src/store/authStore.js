@@ -148,7 +148,7 @@ export const useAuthStore = create((set) => ({
     }
   },
   checkAuth: async () => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, isCheckingAuth: true, error: null });
     try {
       const response = await fetch(`${API_URL}/check-auth`, {
         method: "GET",
@@ -162,6 +162,7 @@ export const useAuthStore = create((set) => ({
         const errorData = await response.json();
         throw new Error(errorData.message || "Error not Authenticated");
       }
+
       const data = await response.json();
 
       toast.success(`Hello, ${data?.user.username}`);
@@ -174,9 +175,10 @@ export const useAuthStore = create((set) => ({
       });
     } catch (error) {
       console.log("🚀 ~ checkAuth: ~ error:", error);
-      throw error;
+      set({ isAuthenticated: false, user: null });
+      toast.error("Authentication failed.");
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false, isCheckingAuth: false }); // Ensure this resets
     }
   },
   resetPassword: async (token, password) => {

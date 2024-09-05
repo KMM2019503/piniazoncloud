@@ -5,7 +5,7 @@ import { useAuthStore } from "../store/authStore";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { logout, isLoading, user } = useAuthStore();
+  const { logout, isLoading, user, isAuthenticated } = useAuthStore();
 
   const onLogout = async (event) => {
     event.preventDefault();
@@ -29,6 +29,12 @@ const HomePage = () => {
   return (
     <div className="max-w-md w-full h-svh md:h-auto bg-blue-950 bg-opacity-20 backdrop-filter backdrop-blur-3xl md:rounded-xl shadow-2xl overflow-hidden flex flex-col items-center p-5">
       <p>{user?.username}</p>
+      <p>
+        {isAuthenticated
+          ? "User is Authenticated"
+          : "User is not Authenticated"}
+      </p>
+
       <p>{user?.isVerified ? "User is Verified" : "User is not Verified"}</p>
       <button
         disabled={isLoading}

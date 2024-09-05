@@ -1,47 +1,120 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-
-import SignUpPage from "./pages/SignUpPage";
-import HomePage from "./pages/HomePage";
-import LogInPage from "./pages/LogInPage";
-import EmailVerifyPage from "./pages/EmailVerifyPage";
-
+import React, { Suspense, lazy, useMemo, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import ForgotPasswrod from "./pages/ForgotPassword";
-import ResetPasswrod from "./pages/ResetPasswrod";
 import { useAuthStore } from "./store/authStore";
-import { useEffect } from "react";
 import Loading from "./components/ui/Loading";
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+// Lazy load components for better performance
+const SignUpPage = lazy(() => import("./pages/SignUpPage"));
+const HomePage = lazy(() => import("./pages/HomePage"));
+const LogInPage = lazy(() => import("./pages/LogInPage"));
+const EmailVerifyPage = lazy(() => import("./pages/EmailVerifyPage"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPasswrod"));
+const ImageUpload = lazy(() => import("./pages/images/ImageUpload"));
+
+const ProtectedRoute = React.memo(({ children }) => {
+  const { isAuthenticated, user, isCheckingAuth } = useAuthStore(); // Ensure user is coming from the store
+
+  // Remove useMemo and return the appropriate component directly
+  if (isCheckingAuth) {
+    return <Loading />;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user.isVerified) {
+  if (!user?.isVerified) {
     return <Navigate to="/email-verify" replace />;
   }
 
   return children;
-};
+});
+ProtectedRoute.displayName = "ProtectedRoute";
 
-const RedirectUser = ({ children }) => {
-  const { isAuthenticated, user } = useAuthStore();
+const RedirectUser = React.memo(({ children }) => {
+  const { isAuthenticated, user } = useAuthStore(); // Ensure user is defined correctly
 
-  if (isAuthenticated && user.isVerified) {
+  // Remove useMemo and return the appropriate component directly
+  if (isAuthenticated && user?.isVerified) {
     return <Navigate to="/" replace />;
   }
 
   return children;
-};
+});
+RedirectUser.displayName = "RedirectUser";
 
 function App() {
-  const { checkAuth, isLoading } = useAuthStore();
+  const { checkAuth, isLoading, user, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  const renderRoutes = useMemo(
+    () => (
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/image-upload"
+          element={
+            <ProtectedRoute>
+              <ImageUpload />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <RedirectUser>
+              <SignUpPage />
+            </RedirectUser>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RedirectUser>
+              <LogInPage />
+            </RedirectUser>
+          }
+        />
+        <Route
+          path="/email-verify"
+          element={
+            <RedirectUser>
+              <EmailVerifyPage />
+            </RedirectUser>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <RedirectUser>
+              <ForgotPassword />
+            </RedirectUser>
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            <RedirectUser>
+              <ResetPassword />
+            </RedirectUser>
+          }
+        />
+      </Routes>
+    ),
+    [isAuthenticated, user]
+  );
 
   if (isLoading) {
     return (
@@ -50,61 +123,12 @@ function App() {
       </div>
     );
   }
+
   return (
     <>
-      {/* <main className="min-h-svh bg-gradient-to-tr from-primary-dark via-primary-dark to-secondary-dark flex items-center justify-center relative overflow-hidden text-gray-300"> */}
       <main className="min-h-svh flex items-center justify-center relative overflow-hidden text-gray-300 bg-black">
         <div className="absolute inset-0 h-full w-full bg-black bg-[radial-gradient(#7A1CAC_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_1%,black)] z-0"></div>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <RedirectUser>
-                <SignUpPage />
-              </RedirectUser>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <RedirectUser>
-                <LogInPage />
-              </RedirectUser>
-            }
-          />
-          <Route
-            path="/email-verify"
-            element={
-              <RedirectUser>
-                <EmailVerifyPage />
-              </RedirectUser>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <RedirectUser>
-                <ForgotPasswrod />
-              </RedirectUser>
-            }
-          />
-          <Route
-            path="/reset-password/:token"
-            element={
-              <RedirectUser>
-                <ResetPasswrod />
-              </RedirectUser>
-            }
-          />
-        </Routes>
+        <Suspense fallback={<Loading />}>{renderRoutes}</Suspense>
         <Toaster
           position="top-right"
           reverseOrder={false}
