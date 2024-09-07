@@ -4,19 +4,18 @@ import { Toaster } from "react-hot-toast";
 import { useAuthStore } from "./store/authStore";
 import Loading from "./components/ui/Loading";
 
-// Lazy load components for better performance
+import PropTypes from "prop-types";
+
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const LogInPage = lazy(() => import("./pages/LogInPage"));
 const EmailVerifyPage = lazy(() => import("./pages/EmailVerifyPage"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPasswrod"));
-const ImageUpload = lazy(() => import("./pages/images/ImageUpload"));
 
 const ProtectedRoute = React.memo(({ children }) => {
-  const { isAuthenticated, user, isCheckingAuth } = useAuthStore(); // Ensure user is coming from the store
+  const { isAuthenticated, user, isCheckingAuth } = useAuthStore();
 
-  // Remove useMemo and return the appropriate component directly
   if (isCheckingAuth) {
     return <Loading />;
   }
@@ -31,12 +30,17 @@ const ProtectedRoute = React.memo(({ children }) => {
 
   return children;
 });
+
 ProtectedRoute.displayName = "ProtectedRoute";
 
-const RedirectUser = React.memo(({ children }) => {
-  const { isAuthenticated, user } = useAuthStore(); // Ensure user is defined correctly
+// Prop validation
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
-  // Remove useMemo and return the appropriate component directly
+const RedirectUser = React.memo(({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
   if (isAuthenticated && user?.isVerified) {
     return <Navigate to="/" replace />;
   }
@@ -44,6 +48,10 @@ const RedirectUser = React.memo(({ children }) => {
   return children;
 });
 RedirectUser.displayName = "RedirectUser";
+
+RedirectUser.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 function App() {
   const { checkAuth, isLoading, user, isAuthenticated } = useAuthStore();
@@ -60,14 +68,6 @@ function App() {
           element={
             <ProtectedRoute>
               <HomePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/image-upload"
-          element={
-            <ProtectedRoute>
-              <ImageUpload />
             </ProtectedRoute>
           }
         />
@@ -126,7 +126,7 @@ function App() {
 
   return (
     <>
-      <main className="min-h-svh flex items-center justify-center relative overflow-hidden text-gray-300 bg-black">
+      <main className="min-h-svh flex  relative overflow-hidden text-gray-300 bg-black">
         <div className="absolute inset-0 h-full w-full bg-black bg-[radial-gradient(#7A1CAC_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,transparent_1%,black)] z-0"></div>
         <Suspense fallback={<Loading />}>{renderRoutes}</Suspense>
         <Toaster
