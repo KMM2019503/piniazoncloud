@@ -5,6 +5,7 @@ import { useAuthStore } from "./store/authStore";
 import Loading from "./components/ui/Loading";
 
 import PropTypes from "prop-types";
+import ImagePage from "./pages/ImagePage";
 
 const SignUpPage = lazy(() => import("./pages/SignUpPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -68,6 +69,14 @@ function App() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/image/:imageId"
+          element={
+            <ProtectedRoute>
+              <ImagePage />
             </ProtectedRoute>
           }
         />

@@ -13,12 +13,13 @@ import { IoCloseOutline } from "react-icons/io5";
 
 import ImageUploadForm from "../components/form/ImageUploadForm";
 import Image from "../components/Image";
+import { useImageStore } from "../store/imagesStore";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const { logout, isLoading } = useAuthStore();
-  const [images, setImages] = useState([]);
+
+  const { isLoading, images, fetchImages } = useImageStore();
+  const { logout } = useAuthStore();
 
   const [isModalShow, setIsModalShow] = useState(false);
 
@@ -34,34 +35,6 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(
-          "http://localhost:3007/api/images/getAllImage",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Error in Fetching images");
-        }
-
-        const data = await response.json();
-        console.log("🚀 ~ fetchImages ~ data:", data);
-        setImages(data.images);
-        setLoading(false);
-      } catch (error) {
-        console.log("🚀 ~ fetchImages ~ error:", error);
-      }
-    };
-
     fetchImages();
   }, []);
 
@@ -132,12 +105,12 @@ const HomePage = () => {
       </div>
 
       <div className="w-full h-full mt-5 px-5 ">
-        {loading ? (
+        {isLoading ? (
           <div>
             <Loading />
           </div>
         ) : images.length > 0 ? (
-          <div className="grid grid-cols-5 gap-2 md:grid-cols-6 md:gap-4 lg:grid-cols-8 lg:gap-5 justify-center items-center">
+          <div className="grid grid-cols-5 gap-1 md:grid-cols-6 md:gap-4 lg:grid-cols-10 lg:gap-2 justify-center items-center">
             {images.map((image) => (
               <Image image={image} key={image._id} />
             ))}

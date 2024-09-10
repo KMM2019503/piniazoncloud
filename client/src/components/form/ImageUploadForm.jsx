@@ -45,9 +45,7 @@ const ImageUploadForm = ({ setIsModalShow }) => {
       toast.success("Image uploaded successfully");
       setIsModalShow(false);
       setUploadedImageUrl(data.url);
-
-      // Force a browser refresh to reload the '/' page
-      window.location.reload(); // This will refresh the whole page
+      window.location.reload();
     } catch (error) {
       console.error("Error uploading image:", error);
       toast.error("Error uploading image");

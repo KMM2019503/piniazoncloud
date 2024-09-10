@@ -2,10 +2,21 @@ import { IoMdDownload } from "react-icons/io";
 import IconButton from "./ui/IconButton";
 import PropTypes from "prop-types";
 import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Image = ({ image }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/image/${image._id}`);
+    // console.log("click");
+  };
+
   return (
-    <div className="w-full h-full relative group cursor-pointer">
+    <div
+      className="w-full h-full relative group cursor-pointer"
+      onClick={() => handleClick()}
+    >
       <img
         src={image.url}
         alt={image.url}
@@ -24,7 +35,7 @@ const Image = ({ image }) => {
               console.log("download button click");
             }}
           >
-            <IoMdDownload className="size-4" />
+            <IoMdDownload className="size-4 text-black" />
           </IconButton>
         </div>
       </div>
