@@ -68,13 +68,12 @@ export const getAllImages = async (req, res) => {
 
 export const FavouritedToggle = async (req, res) => {
   const { userId } = req;
-  console.log("🚀 ~ FavouritedToggle ~ userId:", userId);
+
   const { imageId } = req.params;
 
   try {
     // Find the image by userId and imageId
     const image = await Image.findOne({ _id: imageId });
-    console.log("🚀 ~ FavouritedToggle ~ image:", image);
 
     if (!image) {
       return res.status(404).json({
@@ -121,7 +120,7 @@ export const downloadImage = async (req, res) => {
   const { format } = req.query; // 'jpg', 'jpeg', or 'png'
 
   // Validate requested format
-  const validFormats = ["jpg", "jpeg", "png"];
+  const validFormats = ["jpg", "png"];
   const selectedFormat = validFormats.includes(format) ? format : "jpg"; // Default to 'jpg' if format is not valid
 
   try {
@@ -154,12 +153,15 @@ export const downloadImage = async (req, res) => {
       "/upload/",
       `/upload/fl_attachment,f_${selectedFormat}/`
     );
+    console.log("🚀 ~ downloadImage ~ downloadUrl:", downloadUrl);
 
+    // Redirect the user to the download URL to trigger the
     res.status(200).json({
       success: true,
       message: "Image download link generated successfully.",
       downloadUrl,
     });
+    // res.redirect(downloadUrl);
   } catch (error) {
     console.error("Error generating download link:", error);
     res.status(500).json({

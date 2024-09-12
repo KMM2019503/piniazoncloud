@@ -10,7 +10,7 @@ const override = {
 const Loading = ({ color }) => {
   return (
     <PacmanLoader
-      color={color}
+      color={color ? color : "purple"}
       cssOverride={override}
       size={12}
       speedMultiplier={0.7}

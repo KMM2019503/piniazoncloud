@@ -106,11 +106,11 @@ const HomePage = () => {
 
       <div className="w-full h-full mt-5 px-5 ">
         {isLoading ? (
-          <div>
-            <Loading />
+          <div className="w-full h-full flex justify-center items-center">
+            <Loading color={"#ffffff"} />
           </div>
         ) : images.length > 0 ? (
-          <div className="grid grid-cols-5 gap-1 md:grid-cols-6 md:gap-4 lg:grid-cols-10 lg:gap-2 justify-center items-center">
+          <div className="grid grid-cols-4 gap-1 md:grid-cols-6 md:gap-4 lg:grid-cols-10 lg:gap-2 justify-center items-center">
             {images.map((image) => (
               <Image image={image} key={image._id} />
             ))}
