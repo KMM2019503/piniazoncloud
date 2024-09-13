@@ -37,7 +37,7 @@ const Image = ({ image }) => {
       {image.isFavourited ? (
         <button
           disabled={isLoadingToggle}
-          className="absolute top-1 right-1 md:top-3 md:right-3 disabled:text-red-900 disabled:opacity-30 transition z-50"
+          className="absolute top-1 right-1 md:top-3 md:right-3 disabled:text-red-900 disabled:opacity-30 transition"
           onClick={handleFavToggle}
         >
           <FaHeart className="text-red-500 size-5 group-hover:scale-110 transition" />
@@ -45,7 +45,7 @@ const Image = ({ image }) => {
       ) : (
         <button
           disabled={isLoadingToggle}
-          className="absolute top-1 right-1 md:top-3 md:right-3 disabled:text-red-900 disabled:opacity-30 transition z-50"
+          className="absolute top-1 right-1 md:top-3 md:right-3 disabled:text-red-900 disabled:opacity-30 transition  "
           onClick={handleFavToggle}
         >
           <CiHeart className="text-red-500 size-5 group-hover:scale-110 transition" />

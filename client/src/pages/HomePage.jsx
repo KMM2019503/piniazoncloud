@@ -6,7 +6,7 @@ import { useAuthStore } from "../store/authStore";
 
 import Logo from "../assets/images/Logo.jpeg";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
@@ -49,33 +49,50 @@ const HomePage = () => {
         <IoCloudUploadOutline className="size-8 lg:size-6" />
       </motion.button>
 
-      {isModalShow && (
-        <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-primary-light outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-2xl font-semibold text-gray-400">
-                    Image Upload
-                  </h3>
-                  <motion.button
-                    className="p-1 ml-auto bg-transparent border-0  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setIsModalShow(false)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 1.2 }}
-                  >
-                    <IoCloseOutline className="size-6 text-gray-300" />
-                  </motion.button>
-                </div>
-                <div className="relative p-6 flex-auto">
-                  <ImageUploadForm setIsModalShow={setIsModalShow} />
+      <AnimatePresence>
+        {isModalShow && (
+          <>
+            <motion.div
+              className="justify-center items-end md:items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+              initial={{ opacity: 0, translateY: 300 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              exit={{ opacity: 0, translateY: 300 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.8, 0.25, 1] }}
+            >
+              <div className="relative w-auto md:my-6 mx-auto max-w-3xl">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-secondary-dark outline-none focus:outline-none">
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                    <h3 className="text-2xl font-semibold text-gray-400">
+                      Image Upload
+                    </h3>
+                    <motion.button
+                      className="p-1 ml-auto bg-transparent border-0 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      onClick={() => setIsModalShow(false)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 1.2 }}
+                    >
+                      <IoCloseOutline
+                        style={{ fontSize: "1.5rem" }}
+                        className="text-gray-300"
+                      />
+                    </motion.button>
+                  </div>
+                  <div className="relative p-6 flex-auto">
+                    <ImageUploadForm setIsModalShow={setIsModalShow} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      )}
+            </motion.div>
+            <motion.div
+              className="opacity-25 fixed inset-0 z-40 bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.25 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </>
+        )}
+      </AnimatePresence>
 
       <div className="bg-secondary-dark flex items-center py-2 justify-between px-10">
         <img
